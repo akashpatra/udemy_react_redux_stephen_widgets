@@ -3,9 +3,23 @@ import axios from 'axios';
 
 const Search = () => {
     const [term, setTerm] = useState('programming');
+    const [debouncedTerm, setDebouncedTerm] = useState(term);
     const [results, setResults] = useState([]);
 
     useEffect(() => {
+        // Timer to update the DebouncedTerm after some delay
+        const timerId = setTimeout(() => {
+            setDebouncedTerm(term);
+        }, 1000);
+
+        // CleanUp function to cleanup the timer
+        return () => {
+            clearTimeout(timerId);
+        }
+    }, [term]);
+
+    useEffect(() => {
+        // Initiate Search on DebouncedTerm
         const search = async () => {
             const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
                 params: {
@@ -13,27 +27,17 @@ const Search = () => {
                     list: 'search',
                     origin: '*',
                     format: 'json',
-                    srsearch: term,
+                    srsearch: debouncedTerm,
                 }
             });
             setResults(data.query.search);
         }
 
-        // No Delay in Initial Render, while in re-render delay search request and cancel the old timer.
-        if (term && !results.length) {
+        // If its empty dont initiate Search
+        if (debouncedTerm) {
             search();
-        } else {
-            const timeoutId = setTimeout(() => {
-                if (term) {
-                    search();
-                }
-            }, 1000);
-    
-            return () => {
-                clearTimeout(timeoutId);
-            }
-        }
-    }, [term]);
+        } 
+    }, [debouncedTerm]);
 
     const renderedResults = results.map((result) => {
         return (
