@@ -5,7 +5,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   const ref = useRef();
 
   useEffect(() => {
-    document.body.addEventListener("click", (event) => {
+    const onBodyClick = (event) => {
       // Checks whether or not, the element which was clicked on (i.e., event.target) is inside of our component (i.e., ref.current)
       if (ref.current.contains(event.target)) {
         return;
@@ -13,7 +13,13 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
 
       // Close it if the above condition is false (it means the event was outside the dropdown parent div)
       setOpen(false);
-    });
+    };
+
+    document.body.addEventListener("click", onBodyClick);
+
+    return () => {
+      document.body.removeEventListener("click", onBodyClick);
+    };
   }, []);
 
   const renderedOptions = options.map((option) => {
