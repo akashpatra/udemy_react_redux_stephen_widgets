@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const Dropdown = ({ options, selected, onSelectedChange }) => {
   const [open, setOpen] = useState(false);
+  const ref = useRef();
 
   useEffect(() => {
     document.body.addEventListener("click", (event) => {
-      console.log(event.target);
+      // Checks whether or not, the element which was clicked on (i.e., event.target) is inside of our component (i.e., ref.current)
+      if (ref.current.contains(event.target)) {
+        return;
+      }
+
+      // Close it if the above condition is false (it means the event was outside the dropdown parent div)
       setOpen(false);
     });
   }, []);
@@ -30,7 +36,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   });
 
   return (
-    <div className="ui form">
+    <div ref={ref} className="ui form">
       <div className="field">
         <label className="label">Select a Color</label>
         <div
