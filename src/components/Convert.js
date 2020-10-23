@@ -3,7 +3,23 @@ import axios from 'axios';
 
 const Convert = ({ language, text }) => {
   const [translated, setTranslated] = useState('');
+  const [debouncedText, setDebouncedText] = useState(text);
 
+  // UseEffect to run when 'text' prop changes.
+  // It starts a timer and after 500ms set DebouncedText. 
+  // If, changes happens before 500ms, it cancels the previous timer and starts a new one.
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+        setDebouncedText(text);
+    }, 500);
+
+    // CleanUp Function to clear the Previous Timer
+    return () => {
+        clearTimeout(timerId);
+    };
+  }, [text]);
+
+  // UseEffect to run when 'debouncedText' changes.
   useEffect(() => {
     // Helper Function to add async keyword. As, we can place directly in useEffect.
     const doTranslation = async () => {
@@ -25,7 +41,7 @@ const Convert = ({ language, text }) => {
 
     // Invoke the helper Function
     doTranslation();
-  }, [language, text]);
+  }, [language, debouncedText]);
 
   return (
     <div>
