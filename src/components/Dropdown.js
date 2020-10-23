@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 
-const Dropdown = ({ options, selected, onSelectedChange }) => {
+const Dropdown = ({ label, options, selected, onSelectedChange }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
-  console.log('Dropdown -> Component');
+  // console.log('Dropdown -> Component');
 
   useEffect(() => {
-    console.log('Dropdown -> useEffect');
+    // console.log('Dropdown -> useEffect');
 
     const onBodyClick = (event) => {
       // Checks whether or not, the element which was clicked on (i.e., event.target) is inside of our component (i.e., ref.current)
@@ -19,15 +19,15 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
       setOpen(false);
     };
 
-    document.body.addEventListener("click", onBodyClick);
+    document.body.addEventListener('click', onBodyClick);
 
     return () => {
-      document.body.removeEventListener("click", onBodyClick);
+      document.body.removeEventListener('click', onBodyClick);
     };
   }, []);
 
   const renderedOptions = options.map((option) => {
-    console.log('Dropdown -> renderedOptions');
+    // console.log('Dropdown -> renderedOptions');
 
     // Dont show the selected value again in the list as duplicate.
     if (option.value == selected.value) {
@@ -50,16 +50,16 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   return (
     <div ref={ref} className="ui form">
       <div className="field">
-        <label className="label">Select a Color</label>
+        <label className="label">{label}</label>
         <div
           onClick={() => {
             setOpen(!open);
           }}
-          className={`ui selection dropdown ${open ? "visible active" : ""}`}
+          className={`ui selection dropdown ${open ? 'visible active' : ''}`}
         >
           <i className="dropdown icon"></i>
           <div className="text">{selected.label}</div>
-          <div className={`menu ${open ? "visible transition" : ""}`}>
+          <div className={`menu ${open ? 'visible transition' : ''}`}>
             {renderedOptions}
           </div>
         </div>
