@@ -4,7 +4,11 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
+  console.log('Dropdown -> Component');
+
   useEffect(() => {
+    console.log('Dropdown -> useEffect');
+
     const onBodyClick = (event) => {
       // Checks whether or not, the element which was clicked on (i.e., event.target) is inside of our component (i.e., ref.current)
       if (ref.current.contains(event.target)) {
@@ -23,6 +27,8 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
   }, []);
 
   const renderedOptions = options.map((option) => {
+    console.log('Dropdown -> renderedOptions');
+
     // Dont show the selected value again in the list as duplicate.
     if (option.value == selected.value) {
       return null;
