@@ -2,6 +2,11 @@ import React from 'react';
 
 const Link = ({ className, href, children }) => {
   const onClick = (event) => {
+    // Restore the feature of opening the link in new tab
+    if (event.metaKey || event.ctrlKey) {
+      return;
+    }
+    
     // Prevent the default functionality of browser to reload the whole index.html
     event.preventDefault();
 
